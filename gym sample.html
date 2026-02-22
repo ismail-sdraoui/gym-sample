@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forge Fitness Club | Gym Demo Casablanca</title>
+  <meta name="description" content="Demo gym website for Casablanca clients with membership plans, classes, trainers, lead form, WhatsApp booking, and dark/light mode." />
+  <style>
+    :root{
+      --bg:#0c0f14;
+      --bg-soft:#121722;
+      --card:#151c28;
+      --card-2:#101521;
+      --line:rgba(255,255,255,.08);
+      --text:#eef2f8;
+      --muted:#a9b3c7;
+      --accent:#e43c3c;
+      --accent-2:#b82d2d;
+      --accent-soft:rgba(228,60,60,.12);
+      --success:#27c27a;
+      --shadow:0 14px 40px rgba(0,0,0,.35);
+      --radius:16px;
+      --radius-lg:20px;
+      --max:1140px;
+      --nav-h:72px;
+    }
+
+    html[data-theme="light"]{
+      --bg:#f4f7fb;
+      --bg-soft:#ffffff;
+      --card:#ffffff;
+      --card-2:#f8fbff;
+      --line:rgba(15,25,45,.10);
+      --text:#0f172a;
+      --muted:#5d6b82;
+      --accent:#d22f2f;
+      --accent-2:#b52424;
+      --accent-soft:rgba(210,47,47,.08);
+      --shadow:0 12px 28px rgba(14,24,44,.10);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(700px 300px at 10% -10%, rgba(228,60,60,.10), transparent 60%),
+        radial-gradient(600px 260px at 100% 0%, rgba(228,60,60,.06), transparent 50%),
+        var(--bg);
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+    a{text-decoration:none;color:inherit}
+    img{display:block;max-width:100%}
+    .container{width:min(var(--max), calc(100% - 32px)); margin-inline:auto}
+    .section{padding:72px 0}
+    .section-head{display:flex; align-items:end; justify-content:space-between; gap:12px; margin-bottom:20px}
+    .section-title{margin:0; font-size:clamp(24px,4vw,34px); letter-spacing:-.02em}
+    .section-sub{margin:6px 0 0; color:var(--muted); font-size:14px}
+
+    .grid{display:grid; gap:14px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)), var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:1px solid transparent;
+      border-radius:12px;
+      padding:11px 15px;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      transition:.2s ease;
+      white-space:nowrap;
+      user-select:none;
+      background:none;
+      color:var(--text);
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:linear-gradient(180deg, var(--accent), var(--accent-2));
+      color:white;
+      box-shadow:0 10px 22px rgba(228,60,60,.22);
+    }
+    .btn-outline{
+      border-color:var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .btn-outline:hover{background:rgba(255,255,255,.04)}
+    .btn-ghost{
+      border-color:var(--line);
+      background:transparent;
+    }
+    .btn-sm{padding:8px 10px; border-radius:10px; font-size:13px}
+
+    .icon{
+      width:18px; height:18px; display:inline-block;
+      vertical-align:middle; flex-shrink:0;
+      color:currentColor;
+    }
+    .icon-lg{width:22px; height:22px}
+    .icon-20{width:20px;height:20px}
+    .icon-16{width:16px;height:16px}
+
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(255,255,255,.02);
+    }
+    .chip.accent{
+      color:var(--text);
+      border-color:rgba(228,60,60,.28);
+      background:var(--accent-soft);
+    }
+
+    /* Reveal animations */
+    .reveal{
+      opacity:0;
+      transform:translateY(14px);
+      transition:opacity .45s ease, transform .45s ease;
+    }
+    .reveal.in{
+      opacity:1;
+      transform:none;
+    }
+
+    /* Top progress line */
+    .progress-line{
+      position:fixed; left:0; top:0; height:3px; width:0%;
+      background:linear-gradient(90deg, var(--accent), #ff7676);
+      z-index:80;
+    }
+
+    /* Navbar */
+    .nav-wrap{
+      position:sticky; top:0; z-index:70;
+      height:var(--nav-h);
+      backdrop-filter: blur(12px);
+      background:color-mix(in oklab, var(--bg) 78%, transparent);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      min-height:var(--nav-h);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; font-weight:800;
+      letter-spacing:.2px;
+    }
+    .brand-mark{
+      width:38px; height:38px; border-radius:12px;
+      display:grid; place-items:center;
+      background:linear-gradient(145deg, var(--accent), var(--accent-2));
+      color:white;
+      box-shadow:0 10px 18px rgba(228,60,60,.20);
+    }
+    .brand-sub{
+      font-size:11px; color:var(--muted); font-weight:600; line-height:1;
+      margin-top:2px;
+    }
+    .nav-links{
+      display:flex; align-items:center; gap:16px; font-size:14px; color:var(--muted);
+    }
+    .nav-links a:hover{color:var(--text)}
+    .nav-actions{
+      display:flex; align-items:center; gap:8px;
+    }
+    .icon-btn{
+      width:40px;height:40px;border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      display:grid; place-items:center; cursor:pointer; color:var(--text);
+      transition:.2s;
+    }
+    .icon-btn:hover{background:rgba(255,255,255,.04)}
+    .menu-btn{display:none}
+
+    .mobile-menu{
+      display:none;
+      border-top:1px solid var(--line);
+      background:var(--bg);
+    }
+    .mobile-menu .inner{
+      padding:10px 0;
+      display:grid; gap:6px;
+    }
+    .mobile-menu a{
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    /* Hero */
+    .hero{
+      padding:22px 0 12px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:14px;
+    }
+    .hero-panel{
+      position:relative;
+      overflow:hidden;
+      border-radius:var(--radius-lg);
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        var(--bg-soft);
+      box-shadow:var(--shadow);
+      padding:22px;
+      min-height:430px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .hero-grid-overlay{
+      position:absolute; inset:0;
+      opacity:.45;
+      background:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size:24px 24px;
+      mask-image: radial-gradient(circle at 20% 20%, black, transparent 80%);
+      pointer-events:none;
+    }
+    .hero-glow{
+      position:absolute; width:260px; height:260px; border-radius:50%;
+      background:radial-gradient(circle, rgba(228,60,60,.20), transparent 70%);
+      top:-60px; right:-50px;
+      filter:blur(4px);
+    }
+
+    .hero h1{
+      margin:14px 0 10px;
+      font-size:clamp(28px,5vw,46px);
+      line-height:1.02;
+      letter-spacing:-.02em;
+      max-width:12ch;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width:58ch;
+      font-size:14px;
+    }
+    .hero-actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px}
+    .hero-meta{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;
+    }
+
+    .stats{
+      margin-top:16px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px;
+      background:rgba(255,255,255,.02);
+    }
+    .stat .num{
+      font-size:20px; font-weight:800; letter-spacing:-.02em;
+      display:flex; align-items:baseline; gap:2px;
+    }
+    .stat .num span:last-child{font-size:12px; color:var(--muted); font-weight:700}
+    .stat small{color:var(--muted); font-size:12px}
+
+    /* Hero visual */
+    .hero-visual{
+      display:grid;
+      grid-template-rows:1fr auto;
+      gap:14px;
+    }
+    .preview-card{
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .preview-top{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+    }
+    .preview-title{font-size:13px; color:var(--muted)}
+    .pulse{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 0 rgba(228,60,60,.4);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(228,60,60,.35)}
+      70%{box-shadow:0 0 0 12px rgba(228,60,60,0)}
+      100%{box-shadow:0 0 0 0 rgba(228,60,60,0)}
+    }
+
+    .workout-ui{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:10px;
+    }
+    .mini{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+      padding:10px;
+    }
+    .mini h4{margin:0 0 8px;font-size:13px}
+    .mini .muted{font-size:12px;color:var(--muted)}
+    .meter{
+      height:8px; border-radius:999px; background:rgba(255,255,255,.06);
+      overflow:hidden; margin-top:8px;
+    }
+    .meter span{
+      display:block; height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--accent), #ff8d8d);
+    }
+    .calendar{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:8px;
+    }
+    .day{
+      height:22px; border-radius:8px; border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+    .day.active{
+      background:var(--accent-soft);
+      border-color:rgba(228,60,60,.3);
+    }
+    .hero-bottom-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+    }
+    .micro-card{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+      padding:10px;
+      text-align:center;
+    }
+    .micro-card b{display:block; font-size:14px}
+    .micro-card small{color:var(--muted); font-size:11px}
+
+    .trial-card{
+      padding:16px;
+    }
+    .trial-card h3{margin:0 0 4px; font-size:18px}
+    .trial-card p{margin:0 0 12px; color:var(--muted); font-size:13px}
+    .form{
+      display:grid; gap:10px;
+    }
+    .input, .select{
+      width:100%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      color:var(--text);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    .input:focus, .select:focus{
+      border-color:rgba(228,60,60,.45);
+      box-shadow:0 0 0 3px rgba(228,60,60,.12);
+    }
+    .form-row{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    .form-note{font-size:12px; color:var(--muted)}
+
+    .strip{
+      margin-top:14px;
+      display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+    }
+    .strip-card{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      display:flex; align-items:center; gap:10px;
+    }
+    .strip-icon{
+      width:34px;height:34px;border-radius:10px; display:grid; place-items:center;
+      border:1px solid var(--line);
+      background:var(--accent-soft);
+      color:var(--accent);
+      flex-shrink:0;
+    }
+    .strip-card b{display:block;font-size:13px}
+    .strip-card small{color:var(--muted);font-size:11px}
+
+    /* Pricing */
+    .billing-toggle{
+      display:flex; align-items:center; gap:8px;
+      padding:4px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .billing-toggle button{
+      border:0; background:none; color:var(--muted);
+      padding:8px 10px; border-radius:9px; cursor:pointer; font-weight:700;
+      font-size:13px;
+    }
+    .billing-toggle button.active{
+      background:var(--accent-soft);
+      color:var(--text);
+      border:1px solid rgba(228,60,60,.2);
+    }
+    .plans-grid{grid-template-columns:repeat(3,1fr)}
+    .plan{
+      padding:16px;
+      display:flex; flex-direction:column; gap:10px;
+      position:relative;
+    }
+    .plan.popular{
+      border-color:rgba(228,60,60,.24);
+      box-shadow:0 0 0 1px rgba(228,60,60,.12) inset, var(--shadow);
+    }
+    .badge{
+      position:absolute; top:12px; right:12px;
+      border:1px solid rgba(228,60,60,.25);
+      background:var(--accent-soft);
+      color:var(--text);
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+    }
+    .plan .tier{font-weight:800}
+    .plan .desc{color:var(--muted); font-size:13px}
+    .price{
+      font-size:30px; font-weight:800; letter-spacing:-.02em;
+      display:flex; align-items:end; gap:6px;
+    }
+    .price small{
+      color:var(--muted); font-size:12px; font-weight:700; margin-bottom:4px;
+    }
+    .feat-list{
+      display:grid; gap:7px; margin:4px 0;
+      color:var(--muted); font-size:13px;
+    }
+    .feat-list li{
+      list-style:none; display:flex; align-items:flex-start; gap:8px; padding:0; margin:0;
+    }
+    .feat-list svg{color:var(--accent); margin-top:1px}
+
+    /* Schedule tabs */
+    .tabs{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-bottom:12px;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+      padding:8px 10px;
+      border-radius:10px;
+      font-weight:700;
+      font-size:13px;
+      cursor:pointer;
+    }
+    .tab.active{
+      color:var(--text);
+      border-color:rgba(228,60,60,.28);
+      background:var(--accent-soft);
+    }
+    .schedule-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    .schedule-col{padding:12px}
+    .class-item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      border-radius:12px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+    .class-item:last-child{margin-bottom:0}
+    .time-box{
+      min-width:64px; text-align:center;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:rgba(255,255,255,.02);
+      padding:7px 6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .class-item b{display:block; font-size:14px}
+    .class-item small{color:var(--muted); font-size:12px}
+
+    /* Trainers */
+    .trainers-grid{grid-template-columns:repeat(4,1fr)}
+    .trainer{
+      padding:14px;
+      cursor:pointer;
+      transition:.2s ease;
+      display:grid; gap:10px;
+    }
+    .trainer:hover{
+      transform:translateY(-2px);
+      border-color:rgba(228,60,60,.22);
+      box-shadow:0 0 0 1px rgba(228,60,60,.10) inset, var(--shadow);
+    }
+    .trainer-head{
+      display:flex; align-items:center; gap:10px;
+    }
+    .avatar{
+      width:50px;height:50px;border-radius:14px;
+      border:1px solid var(--line);
+      background:linear-gradient(145deg, var(--accent-soft), rgba(255,255,255,.02));
+      display:grid; place-items:center;
+      color:var(--accent);
+      font-weight:900;
+      font-size:14px;
+    }
+    .trainer small{color:var(--muted); font-size:12px}
+    .tag-row{display:flex; flex-wrap:wrap; gap:6px}
+    .tag{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:4px 8px;
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    /* Facilities */
+    .fac-grid{grid-template-columns:repeat(4,1fr)}
+    .fac{padding:14px; min-height:124px; display:flex; flex-direction:column; justify-content:space-between}
+    .fac .top{display:flex; align-items:center; justify-content:space-between}
+    .fac .ic{
+      width:34px;height:34px;border-radius:10px;
+      border:1px solid var(--line);
+      background:var(--accent-soft);
+      color:var(--accent);
+      display:grid; place-items:center;
+    }
+    .fac p{margin:6px 0 0; color:var(--muted); font-size:12px}
+
+    /* KPI / Calculator */
+    .utility-grid{grid-template-columns:1.05fr .95fr}
+    .calc-wrap{padding:16px}
+    .calc-wrap h3{margin:0 0 4px}
+    .calc-wrap p{margin:0 0 12px; color:var(--muted); font-size:13px}
+    .calc-result{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:rgba(255,255,255,.02);
+      padding:12px;
+      display:grid; gap:4px;
+    }
+    .calc-result b{font-size:18px}
+    .calc-result small{color:var(--muted)}
+    .range{
+      height:8px; border-radius:999px;
+      background:linear-gradient(90deg,#2f9e44,#f4c430,#e43c3c);
+      position:relative;
+      margin-top:8px;
+    }
+    .range .dot{
+      position:absolute; top:50%; transform:translate(-50%,-50%);
+      width:12px;height:12px;border-radius:50%;
+      background:var(--bg-soft);
+      border:2px solid var(--text);
+      box-shadow:0 0 0 2px rgba(0,0,0,.1);
+      left:35%;
+    }
+
+    /* Testimonials slider */
+    .testi-wrap{padding:14px}
+    .slider{
+      position:relative;
+      overflow:hidden;
+    }
+    .slides{
+      display:flex;
+      transition:transform .35s ease;
+      will-change:transform;
+    }
+    .slide{
+      min-width:100%;
+      padding:4px;
+    }
+    .quote{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:rgba(255,255,255,.02);
+      padding:14px;
+      min-height:146px;
+      position:relative;
+    }
+    .quote p{margin:8px 0 10px; color:var(--muted); font-size:13px}
+    .quote .stars{display:flex; gap:2px; color:var(--accent)}
+    .quote .who{font-weight:700; font-size:14px}
+    .quote .role{color:var(--muted); font-size:12px}
+    .slider-nav{
+      margin-top:10px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:8px;
+    }
+    .dots{display:flex; gap:6px}
+    .dot-btn{
+      width:8px;height:8px;border-radius:50%;
+      border:0; background:rgba(255,255,255,.16); cursor:pointer;
+    }
+    .dot-btn.active{background:var(--accent)}
+
+    /* FAQ */
+    .faq-list{display:grid; gap:8px}
+    .faq-item{
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:rgba(255,255,255,.02);
+    }
+    .faq-q{
+      width:100%;
+      border:0; background:none; color:var(--text);
+      padding:12px 14px;
+      display:flex; align-items:center; justify-content:space-between;
+      cursor:pointer;
+      font-weight:700;
+      text-align:left;
+    }
+    .faq-a{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .25s ease;
+    }
+    .faq-a > div{
+      padding:0 14px 12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* Contact */
+    .contact-grid{grid-template-columns:1fr 1fr}
+    .contact-card{padding:14px}
+    .line-item{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.02);
+      margin-bottom:10px;
+    }
+    .line-item:last-child{margin-bottom:0}
+    .line-item small{display:block; color:var(--muted); font-size:11px; margin-bottom:2px}
+    .hours{display:grid; gap:6px}
+    .hours .row{
+      display:flex; justify-content:space-between; gap:8px;
+      color:var(--muted); font-size:13px;
+      border-bottom:1px dashed var(--line);
+      padding-bottom:4px;
+    }
+    .hours .row:last-child{border-bottom:0;padding-bottom:0}
+    .map-shell{
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--card-2);
+      height:100%;
+      min-height:260px;
+      display:grid;
+      grid-template-rows:auto 1fr;
+    }
+    .map-top{
+      border-bottom:1px solid var(--line);
+      padding:10px 12px;
+      display:flex; justify-content:space-between; align-items:center;
+      color:var(--muted); font-size:12px;
+    }
+    .map-fake{
+      position:relative;
+      background:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px),
+        radial-gradient(circle at 25% 30%, rgba(228,60,60,.08), transparent 20%),
+        radial-gradient(circle at 70% 65%, rgba(228,60,60,.08), transparent 24%),
+        var(--card-2);
+      background-size:22px 22px, 22px 22px, auto, auto, auto;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center; color:var(--muted); padding:16px;
+    }
+    .pin{
+      position:absolute; left:56%; top:46%;
+      transform:translate(-50%,-50%);
+      width:16px;height:16px;border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 5px rgba(228,60,60,.18);
+    }
+
+    /* Footer */
+    footer{
+      margin-top:20px;
+      border-top:1px solid var(--line);
+      background:rgba(255,255,255,.01);
+    }
+    .footer{
+      padding:16px 0 84px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      color:var(--muted); font-size:13px;
+    }
+    .footer-links{display:flex; gap:10px; flex-wrap:wrap}
+    .footer-links a:hover{color:var(--text)}
+
+    /* Floating actions */
+    .float-wa{
+      position:fixed; right:14px; bottom:78px; z-index:75;
+      width:54px;height:54px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.18);
+      background:linear-gradient(180deg, var(--accent), var(--accent-2));
+      color:white;
+      display:grid; place-items:center;
+      box-shadow:0 14px 24px rgba(228,60,60,.26);
+    }
+    .to-top{
+      position:fixed; right:14px; bottom:140px; z-index:75;
+      width:46px;height:46px;border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--bg-soft);
+      color:var(--text);
+      display:grid; place-items:center;
+      box-shadow:var(--shadow);
+      opacity:0; pointer-events:none; transition:.2s;
+    }
+    .to-top.show{opacity:1; pointer-events:auto}
+
+    .mobile-cta{
+      position:fixed; left:10px; right:10px; bottom:10px; z-index:74;
+      display:none; gap:8px;
+      padding:8px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:color-mix(in oklab, var(--bg) 86%, transparent);
+      backdrop-filter: blur(10px);
+      box-shadow:var(--shadow);
+    }
+    .mobile-cta a{flex:1}
+    .mobile-cta .btn{width:100%}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; z-index:90;
+      background:rgba(0,0,0,.5);
+      display:none; align-items:center; justify-content:center;
+      padding:16px;
+    }
+    .modal.open{display:flex}
+    .modal-panel{
+      width:min(620px, 100%);
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+    }
+    .modal-body{padding:14px}
+    .coach-hero{
+      display:flex; align-items:center; gap:12px; margin-bottom:10px;
+    }
+    .coach-avatar{
+      width:58px; height:58px; border-radius:16px;
+      background:var(--accent-soft);
+      border:1px solid rgba(228,60,60,.2);
+      color:var(--accent);
+      display:grid; place-items:center;
+      font-weight:900;
+    }
+    .slot-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+      margin-top:10px;
+    }
+    .slot{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:8px;
+      text-align:center;
+      background:rgba(255,255,255,.02);
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* Toast */
+    .toast{
+      position:fixed; left:50%; bottom:84px; transform:translateX(-50%) translateY(12px);
+      z-index:95;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(39,194,122,.25);
+      background:rgba(39,194,122,.12);
+      color:#d4ffe9;
+      box-shadow:var(--shadow);
+      opacity:0; pointer-events:none;
+      transition:.25s;
+      font-size:13px;
+      display:flex; align-items:center; gap:8px;
+      max-width:calc(100% - 20px);
+    }
+    .toast.show{
+      opacity:1; pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 1020px){
+      .hero-grid{grid-template-columns:1fr}
+      .utility-grid{grid-template-columns:1fr}
+      .trainers-grid{grid-template-columns:repeat(2,1fr)}
+      .fac-grid{grid-template-columns:repeat(2,1fr)}
+      .plans-grid{grid-template-columns:1fr}
+      .schedule-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .nav-links{display:none}
+      .menu-btn{display:grid}
+      .nav-actions .desktop-only{display:none}
+    }
+
+    @media (max-width: 640px){
+      .section{padding:54px 0}
+      .hero-panel{padding:16px; min-height:auto}
+      .stats{grid-template-columns:1fr}
+      .strip{grid-template-columns:1fr}
+      .form-row{grid-template-columns:1fr}
+      .trainers-grid{grid-template-columns:1fr}
+      .fac-grid{grid-template-columns:1fr}
+      .hero-bottom-grid{grid-template-columns:1fr}
+      .mobile-cta{display:flex}
+      .float-wa{bottom:86px}
+      .to-top{bottom:148px}
+      .footer{padding-bottom:96px}
+      .slot-grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG ICON SPRITE -->
+  <svg width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true">
+    <symbol id="i-dumbbell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 10v4M6 9v6M18 9v6M21 10v4M8 12h8"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v2a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.3 19.3 0 0 1-6-6A19.8 19.8 0 0 1 2.12 3.18 2 2 0 0 1 4.11 1h2a2 2 0 0 1 2 1.72c.12.9.35 1.77.68 2.6a2 2 0 0 1-.45 2.11L7.1 8.67a16 16 0 0 0 6.23 6.23l1.24-1.24a2 2 0 0 1 2.11-.45c.83.33 1.7.56 2.6.68A2 2 0 0 1 22 16.92z"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+    </symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s-6-4.35-6-10a6 6 0 0 1 12 0c0 5.65-6 10-6 10z"/>
+      <circle cx="12" cy="11" r="2"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 7v6l4 2"/>
+    </symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <path d="M9 12l2 2 4-4"/>
+    </symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"/>
+    </symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 18l-6-6 6-6"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18l6-6-6-6"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor">
+      <path d="m12 2.5 2.95 5.98 6.6.96-4.77 4.65 1.13 6.57L12 17.55 6.09 20.66l1.13-6.57L2.45 9.44l6.6-.96L12 2.5Z"/>
+    </symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 17l6-6 4 4 8-8"/>
+      <path d="M14 7h7v7"/>
+    </symbol>
+    <symbol id="i-heartbeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 12h-4l-3 7-4-14-3 7H2"/>
+    </symbol>
+  </svg>
+
+  <div class="progress-line" id="scrollProgress"></div>
+
+  <!-- NAV -->
+  <div class="nav-wrap">
+    <div class="container nav">
+      <a href="#top" class="brand">
+        <div class="brand-mark">
+          <svg class="icon icon-lg"><use href="#i-dumbbell"></use></svg>
+        </div>
+        <div>
+          Forge Fitness
+          <div class="brand-sub">Sidi Maarouf • Casablanca</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#plans">Abonnements</a>
+        <a href="#schedule">Cours</a>
+        <a href="#trainers">Coachs</a>
+        <a href="#tools">Outils</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon icon-20" id="themeIcon"><use href="#i-sun"></use></svg>
+        </button>
+        <a class="btn btn-outline desktop-only" href="tel:+212612345678">
+          <svg class="icon"><use href="#i-phone"></use></svg>
+          Appeler
+        </a>
+        <a class="btn btn-primary" target="_blank" href="https://wa.me/212612345678?text=Salam%2C%20je%20veux%20r%C3%A9server%20un%20essai%20gratuit%20chez%20Forge%20Fitness.">
+          <svg class="icon"><use href="#i-chat"></use></svg>
+          Essai gratuit
+        </a>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">
+          <svg class="icon icon-20" id="menuIcon"><use href="#i-menu"></use></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="container inner">
+        <a href="#plans">Abonnements</a>
+        <a href="#schedule">Cours</a>
+        <a href="#trainers">Coachs</a>
+        <a href="#tools">Outils</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header id="top" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <section class="hero-panel reveal">
+          <div class="hero-grid-overlay"></div>
+          <div class="hero-glow"></div>
+
+          <div style="position:relative;z-index:1">
+            <div class="chip accent">
+              <svg class="icon icon-16"><use href="#i-bolt"></use></svg>
+              Essai gratuit 1 jour • Réponse rapide
+            </div>
+
+            <h1>Une vraie ambiance gym. Un site qui convertit.</h1>
+            <p>
+              Démo premium pour salle de sport à Casablanca: abonnements, planning des cours,
+              coachs, formulaire, WhatsApp, et interactions modernes. Parfait à montrer à un client.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" target="_blank" href="https://wa.me/212612345678?text=Salam%2C%20je%20veux%20r%C3%A9server%20un%20essai%20gratuit%20chez%20Forge%20Fitness.">
+                <svg class="icon"><use href="#i-chat"></use></svg>
+                Réserver l’essai
+              </a>
+              <a class="btn btn-outline" href="#plans">
+                <svg class="icon"><use href="#i-trend"></use></svg>
+                Voir les offres
+              </a>
+            </div>
+
+            <div class="hero-meta">
+              <span class="chip"><svg class="icon icon-16"><use href="#i-map"></use></svg> Sidi Maarouf</span>
+              <span class="chip"><svg class="icon icon-16"><use href="#i-clock"></use></svg> 7j/7</span>
+              <span class="chip"><svg class="icon icon-16"><use href="#i-shield"></use></svg> Coachs certifiés</span>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="num"><span data-count="1200">0</span><span>+</span></div>
+              <small>Membres actifs</small>
+            </div>
+            <div class="stat">
+              <div class="num"><span data-count="48">0</span><span>h / sem.</span></div>
+              <small>Cours collectifs</small>
+            </div>
+            <div class="stat">
+              <div class="num"><span data-count="97">0</span><span>%</span></div>
+              <small>Taux de satisfaction</small>
+            </div>
+          </div>
+        </section>
+
+        <div class="hero-visual">
+          <section class="card preview-card reveal">
+            <div class="preview-top">
+              <div class="preview-title">Aperçu coaching & progression</div>
+              <div class="pulse" aria-hidden="true"></div>
+            </div>
+
+            <div class="workout-ui">
+              <div class="mini">
+                <h4>Objectif actuel</h4>
+                <div class="muted">Perte de poids • 8 semaines</div>
+                <div class="meter"><span style="width:62%"></span></div>
+                <div class="meter"><span style="width:41%"></span></div>
+                <div class="meter"><span style="width:75%"></span></div>
+              </div>
+              <div class="mini">
+                <h4>Planning</h4>
+                <div class="muted">Cours + séances</div>
+                <div class="calendar">
+                  <div class="day"></div><div class="day active"></div><div class="day"></div><div class="day"></div>
+                  <div class="day active"></div><div class="day"></div><div class="day"></div><div class="day active"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-bottom-grid" style="margin-top:10px">
+              <div class="micro-card"><b>45 min</b><small>Session moyenne</small></div>
+              <div class="micro-card"><b>4.8/5</b><small>Avis membres</small></div>
+              <div class="micro-card"><b>Coach</b><small>Suivi inclus</small></div>
+            </div>
+          </section>
+
+          <section class="card trial-card reveal">
+            <h3>Essai gratuit</h3>
+            <p>Laissez vos infos. Le club confirme rapidement votre créneau (démo).</p>
+
+            <form id="leadForm" class="form">
+              <div class="form-row">
+                <input class="input" name="name" type="text" placeholder="Nom complet" required />
+                <input class="input" name="phone" type="tel" placeholder="Téléphone" required />
+              </div>
+              <div class="form-row">
+                <select class="select" name="goal" required>
+                  <option value="">Objectif</option>
+                  <option>Perte de poids</option>
+                  <option>Prise de masse</option>
+                  <option>Remise en forme</option>
+                  <option>Cardio / Endurance</option>
+                </select>
+                <select class="select" name="time" required>
+                  <option value="">Créneau préféré</option>
+                  <option>Matin</option>
+                  <option>Après-midi</option>
+                  <option>Soir</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" type="submit">
+                <svg class="icon"><use href="#i-check"></use></svg>
+                Demander mon essai
+              </button>
+              <div class="form-note">Démo portfolio: connectez ce formulaire à Formspree, Supabase ou votre backend.</div>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <div class="strip reveal">
+        <div class="strip-card">
+          <div class="strip-icon"><svg class="icon"><use href="#i-dumbbell"></use></svg></div>
+          <div><b>Musculation complète</b><small>Machines + poids libres</small></div>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon"><svg class="icon"><use href="#i-users"></use></svg></div>
+          <div><b>Cours collectifs</b><small>HIIT, cycling, yoga</small></div>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon"><svg class="icon"><use href="#i-heartbeat"></use></svg></div>
+          <div><b>Coaching & suivi</b><small>Débutants et confirmés</small></div>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon"><svg class="icon"><use href="#i-chat"></use></svg></div>
+          <div><b>WhatsApp booking</b><small>Conversion rapide</small></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PLANS -->
+  <section id="plans" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Abonnements</h2>
+          <p class="section-sub">Toggle mensuel/annuel pour rendre la page plus “réelle”.</p>
+        </div>
+        <div class="billing-toggle" id="billingToggle">
+          <button class="active" data-billing="monthly">Mensuel</button>
+          <button data-billing="yearly">Annuel <span style="opacity:.8">(-15%)</span></button>
+        </div>
+      </div>
+
+      <div class="grid plans-grid" id="plansGrid"></div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="schedule" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Planning des cours</h2>
+          <p class="section-sub">Tabs interactifs (Lun → Dim) pour simuler un vrai site de salle.</p>
+        </div>
+      </div>
+
+      <div class="tabs reveal" id="scheduleTabs"></div>
+      <div class="schedule-grid reveal" id="scheduleGrid"></div>
+    </div>
+  </section>
+
+  <!-- TRAINERS -->
+  <section id="trainers" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Nos coachs</h2>
+          <p class="section-sub">Cliquez un coach pour ouvrir sa fiche (modal démo).</p>
+        </div>
+      </div>
+
+      <div class="grid trainers-grid" id="trainersGrid"></div>
+    </div>
+  </section>
+
+  <!-- FACILITIES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Équipements & services</h2>
+          <p class="section-sub">Visuel clean + icônes pro, plus “gym brand” que la version précédente.</p>
+        </div>
+      </div>
+
+      <div class="grid fac-grid reveal" id="facilitiesGrid"></div>
+    </div>
+  </section>
+
+  <!-- TOOLS + TESTIMONIALS -->
+  <section id="tools" class="section">
+    <div class="container">
+      <div class="grid utility-grid">
+        <div class="card calc-wrap reveal">
+          <h3>Calculateur IMC (BMI)</h3>
+          <p>Petit outil interactif utile pour rendre la démo plus vivante (et plus crédible pour un gym).</p>
+
+          <div class="form-row">
+            <input id="heightInput" class="input" type="number" min="120" max="230" placeholder="Taille (cm)" />
+            <input id="weightInput" class="input" type="number" min="30" max="250" placeholder="Poids (kg)" />
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" id="calcBtn">
+              <svg class="icon"><use href="#i-trend"></use></svg>
+              Calculer
+            </button>
+            <button class="btn btn-outline" id="calcReset">Reset</button>
+          </div>
+
+          <div class="calc-result" id="bmiResult">
+            <b>—</b>
+            <small>Entrez votre taille et votre poids.</small>
+            <div class="range"><div class="dot" id="bmiDot"></div></div>
+          </div>
+        </div>
+
+        <div class="card testi-wrap reveal">
+          <h3 style="margin:2px 0 4px">Avis membres</h3>
+          <p style="margin:0 0 10px;color:var(--muted);font-size:13px">Slider interactif + auto-play (peut être désactivé).</p>
+
+          <div class="slider">
+            <div class="slides" id="slides"></div>
+          </div>
+
+          <div class="slider-nav">
+            <div style="display:flex; gap:6px;">
+              <button class="icon-btn" id="prevSlide" aria-label="Previous">
+                <svg class="icon"><use href="#i-arrow-left"></use></svg>
+              </button>
+              <button class="icon-btn" id="nextSlide" aria-label="Next">
+                <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </button>
+            </div>
+            <div class="dots" id="slideDots"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Questions fréquentes</h2>
+          <p class="section-sub">Accordéon FAQ pour la conversion avant prise de contact.</p>
+        </div>
+      </div>
+
+      <div class="faq-list reveal" id="faqList"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <h2 class="section-title">Infos & contact</h2>
+          <p class="section-sub">Adresse, horaires, CTA WhatsApp + placeholder map pro.</p>
+        </div>
+      </div>
+
+      <div class="grid contact-grid">
+        <div class="card contact-card reveal">
+          <div class="line-item">
+            <small>Adresse</small>
+            <b>Lotissement Al Mostakbal, Sidi Maarouf, Casablanca</b>
+          </div>
+
+          <div class="line-item">
+            <small>Téléphone / WhatsApp</small>
+            <b><a href="tel:+212612345678">+212 6 12 34 56 78</a></b>
+          </div>
+
+          <div class="line-item">
+            <small>Horaires</small>
+            <div class="hours">
+              <div class="row"><span>Lundi – Vendredi</span><span>06:00 – 23:00</span></div>
+              <div class="row"><span>Samedi</span><span>08:00 – 22:00</span></div>
+              <div class="row"><span>Dimanche</span><span>09:00 – 20:00</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a class="btn btn-primary" target="_blank" href="https://wa.me/212612345678?text=Salam%2C%20je%20veux%20r%C3%A9server%20un%20essai%20gratuit%20chez%20Forge%20Fitness.">
+              <svg class="icon"><use href="#i-chat"></use></svg>
+              Ouvrir WhatsApp
+            </a>
+            <a class="btn btn-outline" target="_blank" href="https://maps.google.com/?q=Sidi+Maarouf+Casablanca">
+              <svg class="icon"><use href="#i-map"></use></svg>
+              Google Maps
+            </a>
+          </div>
+        </div>
+
+        <div class="map-shell reveal">
+          <div class="map-top">
+            <span>Localisation</span>
+            <span>Casablanca • Sidi Maarouf</span>
+          </div>
+          <div class="map-fake">
+            <div class="pin"></div>
+            <div>
+              <b style="display:block; margin-bottom:6px; color:var(--text)">Map Placeholder (démo)</b>
+              Remplace par un vrai <b>Google Maps iframe</b> chez le client.<br />
+              Le bouton Google Maps fonctionne déjà.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer">
+      <div>
+        <b style="color:var(--text)">Forge Fitness Club</b><br />
+        Demo portfolio • Dark/Light • Interactions • WhatsApp lead flow
+      </div>
+      <div class="footer-links">
+        <a href="#plans">Abonnements</a>
+        <a href="#schedule">Cours</a>
+        <a href="#trainers">Coachs</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING ACTIONS -->
+  <a class="float-wa" target="_blank" aria-label="WhatsApp" href="https://wa.me/212612345678?text=Salam%2C%20je%20veux%20r%C3%A9server%20un%20essai%20gratuit%20chez%20Forge%20Fitness.">
+    <svg class="icon icon-20"><use href="#i-chat"></use></svg>
+  </a>
+
+  <button class="to-top" id="toTop" aria-label="Retour en haut">
+    <svg class="icon"><use href="#i-arrow-up"></use></svg>
+  </button>
+
+  <div class="mobile-cta">
+    <a href="tel:+212612345678" class="btn btn-outline">
+      <svg class="icon"><use href="#i-phone"></use></svg>
+      Appeler
+    </a>
+    <a href="https://wa.me/212612345678?text=Salam%2C%20je%20veux%20r%C3%A9server%20un%20essai%20gratuit%20chez%20Forge%20Fitness." target="_blank" class="btn btn-primary">
+      <svg class="icon"><use href="#i-chat"></use></svg>
+      WhatsApp
+    </a>
+  </div>
+
+  <!-- TRAINER MODAL -->
+  <div class="modal" id="coachModal" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <strong>Fiche coach</strong>
+        <button class="icon-btn" id="closeModal" aria-label="Close">
+          <svg class="icon"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="coachModalBody"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg class="icon"><use href="#i-check"></use></svg>
+    <span id="toastText">Action réussie</span>
+  </div>
+
+  <script>
+    // -----------------------
+    // Demo data
+    // -----------------------
+    const plans = [
+      {
+        tier: "Starter",
+        desc: "Accès salle",
+        monthly: 299,
+        yearly: 3050,
+        featured: false,
+        features: ["Musculation + cardio", "Heures creuses", "1 bilan initial"]
+      },
+      {
+        tier: "Pro",
+        desc: "Le meilleur rapport qualité/prix",
+        monthly: 449,
+        yearly: 4580,
+        featured: true,
+        features: ["Accès illimité 7j/7", "Cours collectifs inclus", "Suivi coach 1x/semaine", "Plan nutrition de base"]
+      },
+      {
+        tier: "Elite",
+        desc: "Coaching avancé",
+        monthly: 699,
+        yearly: 7130,
+        featured: false,
+        features: ["Accès illimité + cours", "2 séances coach/semaine", "Suivi progression complet", "Priorité cours"]
+      }
+    ];
+
+    const schedule = {
+      "Lun": [
+        { time:"07:00", title:"HIIT Morning", coach:"Coach Sara", spots:6 },
+        { time:"18:30", title:"Cycling", coach:"Coach Omar", spots:4 },
+        { time:"20:00", title:"Strength Basics", coach:"Coach Yassine", spots:8 }
+      ],
+      "Mar": [
+        { time:"10:30", title:"Yoga Flow", coach:"Coach Lina", spots:9 },
+        { time:"19:00", title:"Functional Training", coach:"Coach Hamza", spots:5 },
+        { time:"20:30", title:"Core & Mobility", coach:"Coach Lina", spots:7 }
+      ],
+      "Mer": [
+        { time:"07:00", title:"HIIT Morning", coach:"Coach Sara", spots:5 },
+        { time:"18:30", title:"Cycling", coach:"Coach Omar", spots:3 },
+        { time:"20:30", title:"Boxe Fitness", coach:"Coach Hamza", spots:6 }
+      ],
+      "Jeu": [
+        { time:"10:30", title:"Yoga Flow", coach:"Coach Lina", spots:8 },
+        { time:"19:30", title:"Functional Training", coach:"Coach Hamza", spots:4 },
+        { time:"21:00", title:"Stretch & Recovery", coach:"Coach Lina", spots:10 }
+      ],
+      "Ven": [
+        { time:"07:00", title:"HIIT Morning", coach:"Coach Sara", spots:7 },
+        { time:"18:30", title:"Cycling", coach:"Coach Omar", spots:2 },
+        { time:"20:30", title:"Boxe Fitness", coach:"Coach Hamza", spots:6 }
+      ],
+      "Sam": [
+        { time:"09:30", title:"Bootcamp", coach:"Coach Yassine", spots:12 },
+        { time:"12:00", title:"Mobility Class", coach:"Coach Lina", spots:10 },
+        { time:"18:00", title:"Open Coaching", coach:"Coach Omar", spots:5 }
+      ],
+      "Dim": [
+        { time:"11:00", title:"Stretch & Mobility", coach:"Coach Lina", spots:9 },
+        { time:"17:00", title:"Beginner Circuit", coach:"Coach Yassine", spots:11 }
+      ]
+    };
+
+    const trainers = [
+      {
+        id:1, initials:"YS", name:"Yassine",
+        role:"Musculation • Force",
+        bio:"Spécialiste en prise de masse et progression technique. Idéal pour débutants qui veulent une structure claire.",
+        tags:["Prise de masse","Débutants","Programme","Force"],
+        slots:["Lun 18:00","Mer 19:00","Sam 10:00"]
+      },
+      {
+        id:2, initials:"SR", name:"Sara",
+        role:"HIIT • Cardio",
+        bio:"Coach dynamique orientée condition physique, perte de poids et endurance.",
+        tags:["Perte de poids","HIIT","Cardio"],
+        slots:["Lun 07:00","Mer 07:00","Ven 07:00"]
+      },
+      {
+        id:3, initials:"LN", name:"Lina",
+        role:"Yoga • Mobilité",
+        bio:"Travail de mobilité, récupération et posture pour garder un entraînement durable.",
+        tags:["Yoga","Recovery","Souplesse"],
+        slots:["Mar 10:30","Jeu 10:30","Dim 11:00"]
+      },
+      {
+        id:4, initials:"HM", name:"Hamza",
+        role:"Functional • Boxe",
+        bio:"Cours intenses et motivants. Bon profil pour remise en forme et énergie.",
+        tags:["Functional","Boxe","Conditioning"],
+        slots:["Mar 19:00","Jeu 19:30","Ven 20:30"]
+      }
+    ];
+
+    const facilities = [
+      { title:"Musculation complète", text:"Machines, racks, poids libres et bancs.", icon:"i-dumbbell" },
+      { title:"Zone cardio", text:"Tapis, vélos, rameurs et elliptique.", icon:"i-heartbeat" },
+      { title:"Coaching présent", text:"Aide au programme et correction technique.", icon:"i-users" },
+      { title:"Réservation rapide", text:"Cours et essai via WhatsApp.", icon:"i-chat" },
+      { title:"Hygiène & sécurité", text:"Espaces entretenus et matériel vérifié.", icon:"i-shield" },
+      { title:"Grande amplitude", text:"Horaires larges toute la semaine.", icon:"i-clock" },
+      { title:"Accès pratique", text:"Proche des axes principaux de Casa.", icon:"i-map" },
+      { title:"Progression suivie", text:"Objectifs et routine plus clairs.", icon:"i-trend" }
+    ];
+
+    const testimonials = [
+      {
+        name:"Salma R.",
+        role:"Membre • 6 mois",
+        text:"Le planning des cours est super clair et la réservation via WhatsApp m’a convaincue direct. J’aime aussi l’ambiance.",
+        rating:5
+      },
+      {
+        name:"Mehdi A.",
+        role:"Membre • 3 mois",
+        text:"J’ai commencé avec l’essai gratuit. Le coach m’a donné un plan simple, et je suis resté. Très bon suivi.",
+        rating:5
+      },
+      {
+        name:"Youssef B.",
+        role:"Débutant",
+        text:"Je n’avais jamais mis les pieds dans une salle. Ici, on m’a accompagné étape par étape sans pression.",
+        rating:5
+      }
+    ];
+
+    const faqs = [
+      { q:"Faut-il réserver avant de venir ?", a:"Pas obligatoire, mais recommandé pour l’essai gratuit et les cours collectifs. Ça réduit l’attente et améliore l’accueil." },
+      { q:"L’essai gratuit est-il sans engagement ?", a:"Oui. L’essai vous permet de découvrir la salle, les équipements et l’ambiance avant de choisir un abonnement." },
+      { q:"Est-ce adapté aux débutants ?", a:"Oui. Le coach peut vous proposer un programme simple et vous aider à bien utiliser les machines." },
+      { q:"Quels moyens de paiement accepter ?", a:"En démo, vous pouvez afficher cash. Pour un vrai client, ajoutez carte/virement si disponible." }
+    ];
+
+    // -----------------------
+    // Helpers
+    // -----------------------
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+    function icon(name, cls="icon icon-16"){
+      return `<svg class="${cls}"><use href="#${name}"></use></svg>`;
+    }
+
+    function showToast(msg){
+      const toast = $("#toast");
+      $("#toastText").textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    // -----------------------
+    // Theme toggle
+    // -----------------------
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem("gym-demo-theme");
+    if(savedTheme) root.setAttribute("data-theme", savedTheme);
+    updateThemeIcon();
+
+    $("#themeToggle").addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("gym-demo-theme", next);
+      updateThemeIcon();
+    });
+
+    function updateThemeIcon(){
+      const isDark = root.getAttribute("data-theme") === "dark";
+      $("#themeIcon").innerHTML = `<use href="#${isDark ? "i-sun" : "i-moon"}"></use>`;
+    }
+
+    // -----------------------
+    // Mobile menu
+    // -----------------------
+    $("#menuBtn").addEventListener("click", () => {
+      const mm = $("#mobileMenu");
+      const open = mm.style.display === "block";
+      mm.style.display = open ? "none" : "block";
+      $("#menuIcon").innerHTML = `<use href="#${open ? "i-menu" : "i-close"}"></use>`;
+    });
+    $$("#mobileMenu a").forEach(a => a.addEventListener("click", () => {
+      $("#mobileMenu").style.display = "none";
+      $("#menuIcon").innerHTML = `<use href="#i-menu"></use>`;
+    }));
+
+    // -----------------------
+    // Render pricing
+    // -----------------------
+    let billingMode = "monthly";
+    const plansGrid = $("#plansGrid");
+
+    function renderPlans(){
+      plansGrid.innerHTML = plans.map(plan => `
+        <article class="card plan ${plan.featured ? "popular" : ""} reveal in">
+          ${plan.featured ? `<div class="badge">Populaire</div>` : ""}
+          <div class="tier">${plan.tier}</div>
+          <div class="desc">${plan.desc}</div>
+          <div class="price">
+            ${billingMode === "monthly" ? plan.monthly : plan.yearly}
+            <small>MAD / ${billingMode === "monthly" ? "mois" : "an"}</small>
+          </div>
+          <ul class="feat-list">
+            ${plan.features.map(f => `<li>${icon("i-check")} <span>${f}</span></li>`).join("")}
+          </ul>
+          <a class="btn ${plan.featured ? "btn-primary" : "btn-outline"}" target="_blank"
+             href="https://wa.me/212612345678?text=${encodeURIComponent(`Salam, je veux plus d'infos sur l'abonnement ${plan.tier} chez Forge Fitness.`)}">
+            ${icon("i-chat")} Demander infos
+          </a>
+        </article>
+      `).join("");
+    }
+    renderPlans();
+
+    $$("#billingToggle button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        $$("#billingToggle button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        billingMode = btn.dataset.billing;
+        renderPlans();
+      });
+    });
+
+    // -----------------------
+    // Schedule tabs + render
+    // -----------------------
+    const days = Object.keys(schedule);
+    let activeDay = "Lun";
+
+    function renderScheduleTabs(){
+      $("#scheduleTabs").innerHTML = days.map(d => `
+        <button class="tab ${d === activeDay ? "active" : ""}" data-day="${d}">${d}</button>
+      `).join("");
+
+      $$("#scheduleTabs .tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          activeDay = tab.dataset.day;
+          renderScheduleTabs();
+          renderScheduleGrid();
+        });
+      });
+    }
+
+    function renderScheduleGrid(){
+      const items = schedule[activeDay];
+      const left = items.slice(0, Math.ceil(items.length / 2));
+      const right = items.slice(Math.ceil(items.length / 2));
+
+      const col = (arr) => `
+        <div class="card schedule-col">
+          ${arr.map(c => `
+            <div class="class-item">
+              <div class="time-box">${c.time}</div>
+              <div>
+                <b>${c.title}</b>
+                <small>${c.coach} • ${c.spots} places</small>
+              </div>
+              <a class="btn btn-sm btn-outline" target="_blank"
+                 href="https://wa.me/212612345678?text=${encodeURIComponent(`Salam, je veux réserver ${c.title} (${activeDay} ${c.time}).`)}">
+                 Réserver
+              </a>
+            </div>
+          `).join("")}
+          ${arr.length === 0 ? `<div class="class-item"><div class="time-box">—</div><div><b>Aucun cours</b><small>Ce jour-là</small></div></div>` : ""}
+        </div>
+      `;
+
+      $("#scheduleGrid").innerHTML = col(left) + col(right);
+    }
+
+    renderScheduleTabs();
+    renderScheduleGrid();
+
+    // -----------------------
+    // Trainers grid + modal
+    // -----------------------
+    function renderTrainers(){
+      $("#trainersGrid").innerHTML = trainers.map(t => `
+        <article class="card trainer" data-id="${t.id}">
+          <div class="trainer-head">
+            <div class="avatar">${t.initials}</div>
+            <div>
+              <b>${t.name}</b><br />
+              <small>${t.role}</small>
+            </div>
+          </div>
+          <div class="tag-row">
+            ${t.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+          <div style="color:var(--muted);font-size:12px;">Cliquez pour voir la fiche coach</div>
+        </article>
+      `).join("");
+
+      $$("#trainersGrid .trainer").forEach(el => {
+        el.addEventListener("click", () => openCoachModal(Number(el.dataset.id)));
+      });
+    }
+    renderTrainers();
+
+    function openCoachModal(id){
+      const coach = trainers.find(t => t.id === id);
+      if(!coach) return;
+      $("#coachModalBody").innerHTML = `
+        <div class="coach-hero">
+          <div class="coach-avatar">${coach.initials}</div>
+          <div>
+            <div style="font-weight:800">${coach.name}</div>
+            <div style="color:var(--muted);font-size:13px">${coach.role}</div>
+          </div>
+        </div>
+
+        <div class="tag-row">${coach.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+
+        <p style="color:var(--muted);font-size:13px;margin:10px 0 0">${coach.bio}</p>
+
+        <div style="margin-top:12px;font-weight:700;font-size:13px">Créneaux disponibles (démo)</div>
+        <div class="slot-grid">
+          ${coach.slots.map(s => `<div class="slot">${s}</div>`).join("")}
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+          <a class="btn btn-primary" target="_blank"
+             href="https://wa.me/212612345678?text=${encodeURIComponent(`Salam, je veux réserver une séance avec coach ${coach.name}.`)}">
+            ${icon("i-chat")} Réserver avec ${coach.name}
+          </a>
+          <button class="btn btn-outline" id="coachCloseSecondary">Fermer</button>
+        </div>
+      `;
+      $("#coachModal").classList.add("open");
+      $("#coachModal").setAttribute("aria-hidden", "false");
+      $("#coachCloseSecondary")?.addEventListener("click", closeCoachModal);
+    }
+
+    function closeCoachModal(){
+      $("#coachModal").classList.remove("open");
+      $("#coachModal").setAttribute("aria-hidden", "true");
+    }
+    $("#closeModal").addEventListener("click", closeCoachModal);
+    $("#coachModal").addEventListener("click", (e) => {
+      if(e.target.id === "coachModal") closeCoachModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeCoachModal();
+    });
+
+    // -----------------------
+    // Facilities render
+    // -----------------------
+    $("#facilitiesGrid").innerHTML = facilities.map(f => `
+      <article class="card fac reveal in">
+        <div class="top">
+          <div class="ic">${icon(f.icon, "icon")}</div>
+        </div>
+        <div>
+          <b>${f.title}</b>
+          <p>${f.text}</p>
+        </div>
+      </article>
+    `).join("");
+
+    // -----------------------
+    // Testimonials slider
+    // -----------------------
+    let slideIndex = 0;
+    let autoplay;
+
+    function renderTestimonials(){
+      $("#slides").innerHTML = testimonials.map(t => `
+        <div class="slide">
+          <div class="quote">
+            <div class="stars">
+              ${Array.from({length:t.rating}).map(() => icon("i-star", "icon-16")).join("")}
+            </div>
+            <p>${t.text}</p>
+            <div class="who">${t.name}</div>
+            <div class="role">${t.role}</div>
+          </div>
+        </div>
+      `).join("");
+
+      $("#slideDots").innerHTML = testimonials.map((_,i) => `
+        <button class="dot-btn ${i===slideIndex ? "active":""}" data-i="${i}" aria-label="Slide ${i+1}"></button>
+      `).join("");
+
+      $$("#slideDots .dot-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          slideIndex = Number(btn.dataset.i);
+          updateSlider();
+          restartAutoplay();
+        });
+      });
+
+      updateSlider();
+      restartAutoplay();
+    }
+
+    function updateSlider(){
+      $("#slides").style.transform = `translateX(-${slideIndex * 100}%)`;
+      $$("#slideDots .dot-btn").forEach((d,i) => d.classList.toggle("active", i===slideIndex));
+    }
+
+    function nextSlide(){ slideIndex = (slideIndex + 1) % testimonials.length; updateSlider(); }
+    function prevSlide(){ slideIndex = (slideIndex - 1 + testimonials.length) % testimonials.length; updateSlider(); }
+
+    function restartAutoplay(){
+      clearInterval(autoplay);
+      autoplay = setInterval(nextSlide, 4500);
+    }
+
+    $("#nextSlide").addEventListener("click", () => { nextSlide(); restartAutoplay(); });
+    $("#prevSlide").addEventListener("click", () => { prevSlide(); restartAutoplay(); });
+
+    renderTestimonials();
+
+    // -----------------------
+    // FAQ render
+    // -----------------------
+    $("#faqList").innerHTML = faqs.map((f, idx) => `
+      <div class="faq-item">
+        <button class="faq-q" data-idx="${idx}">
+          <span>${f.q}</span>
+          <span style="color:var(--muted)">+</span>
+        </button>
+        <div class="faq-a"><div>${f.a}</div></div>
+      </div>
+    `).join("");
+
+    $$("#faqList .faq-q").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const current = btn.parentElement;
+        const ans = $(".faq-a", current);
+        const iconSpan = btn.lastElementChild;
+        const open = ans.style.maxHeight && ans.style.maxHeight !== "0px";
+
+        $$("#faqList .faq-item").forEach(item => {
+          $(".faq-a", item).style.maxHeight = "0px";
+          $(".faq-q span:last-child", item).textContent = "+";
+        });
+
+        if(!open){
+          ans.style.maxHeight = ans.scrollHeight + "px";
+          iconSpan.textContent = "–";
+        }
+      });
+    });
+
+    // -----------------------
+    // Lead form demo
+    // -----------------------
+    $("#leadForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      if(!data.name || !data.phone || !data.goal || !data.time){
+        showToast("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      form.reset();
+      showToast("Demande d’essai envoyée (démo).");
+    });
+
+    // -----------------------
+    // BMI Calculator
+    // -----------------------
+    $("#calcBtn").addEventListener("click", () => {
+      const h = Number($("#heightInput").value);
+      const w = Number($("#weightInput").value);
+
+      if(!h || !w || h < 120 || h > 230 || w < 30 || w > 250){
+        showToast("Valeurs invalides.");
+        return;
+      }
+
+      const bmi = w / Math.pow(h / 100, 2);
+      const bmiRounded = bmi.toFixed(1);
+
+      let label = "Normal";
+      if (bmi < 18.5) label = "Insuffisance pondérale";
+      else if (bmi < 25) label = "Poids normal";
+      else if (bmi < 30) label = "Surpoids";
+      else label = "Obésité";
+
+      $("#bmiResult b").textContent = `IMC: ${bmiRounded}`;
+      $("#bmiResult small").textContent = `${label} • Démo informative (pas un diagnostic médical).`;
+
+      // Position dot on 10-40 scale
+      const clamped = Math.max(10, Math.min(40, bmi));
+      const pct = ((clamped - 10) / 30) * 100;
+      $("#bmiDot").style.left = pct + "%";
+    });
+
+    $("#calcReset").addEventListener("click", () => {
+      $("#heightInput").value = "";
+      $("#weightInput").value = "";
+      $("#bmiResult b").textContent = "—";
+      $("#bmiResult small").textContent = "Entrez votre taille et votre poids.";
+      $("#bmiDot").style.left = "35%";
+    });
+
+    // -----------------------
+    // Scroll progress + to-top
+    // -----------------------
+    const progress = $("#scrollProgress");
+    const toTop = $("#toTop");
+
+    function onScrollUI(){
+      const scrollTop = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (scrollTop / max) * 100 : 0;
+      progress.style.width = pct + "%";
+      toTop.classList.toggle("show", scrollTop > 400);
+    }
+    window.addEventListener("scroll", onScrollUI);
+    onScrollUI();
+
+    toTop.addEventListener("click", () => window.scrollTo({ top:0, behavior:"smooth" }));
+
+    // -----------------------
+    // Animated counters on reveal
+    // -----------------------
+    function animateCounter(el){
+      if(el.dataset.done) return;
+      el.dataset.done = "1";
+      const target = Number(el.dataset.count);
+      const duration = 1100;
+      const start = performance.now();
+
+      function frame(now){
+        const p = Math.min(1, (now - start) / duration);
+        el.textContent = Math.floor(target * (1 - Math.pow(1 - p, 3)));
+        if(p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // -----------------------
+    // Reveal observer
+    // -----------------------
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("in");
+          $("[data-count]", entry.target) && $$("[data-count]", entry.target).forEach(animateCounter);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    $$(".reveal").forEach(el => revealObserver.observe(el));
+
+    // start counters if already visible in hero
+    $$("[data-count]").forEach(el => animateCounter(el));
+
+    // -----------------------
+    // Nice UX: close mobile menu on resize desktop
+    // -----------------------
+    window.addEventListener("resize", () => {
+      if(window.innerWidth > 1020){
+        $("#mobileMenu").style.display = "none";
+        $("#menuIcon").innerHTML = `<use href="#i-menu"></use>`;
+      }
+    });
+  </script>
+</body>
+</html>
